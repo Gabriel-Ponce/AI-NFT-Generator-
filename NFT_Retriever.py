@@ -11,6 +11,9 @@ from PIL import Image
 import sys
 
 class NFT_Retriever:
+"""
+This class Retrieves NFT's using curl to access the OpenSea API without having an API KEY
+"""
     
     def __init__(self, qual_cat = 1):
         self.category = pd.read_csv(f'{str(qual_cat)}.csv')
@@ -25,6 +28,14 @@ class NFT_Retriever:
 
     
     def openseaSearch(self, searchterm, **kwargs):
+        """
+        Use the Google Search API to query the name of a collection and returns the link of the most similar collection
+        
+        :param searchterm: the collection term to be searched  
+
+        :returns: final part of the collection link
+        
+        """
         googleapi = build("customsearch" ,"v1", developerKey= self.APIKEY)
         res = googleapi.cse().list(q=searchterm, cx=self.CLIENT_ID, **kwargs).execute()
         try:
@@ -37,10 +48,24 @@ class NFT_Retriever:
             print(res)
 
     def getCollection(self, collection_index=0):
+        """
+        Get the Collection name from the csv
+        
+        :returns: Collection name as a string
+        """
+        
         return self.category['Collections'][collection_index]
         #print(self.result)
     
     def getAssets(self, collection_name):
+
+        """
+        Use the windows command prompt to use curl and get a collection using the openSea API and saves the json as a .json
+        file
+        
+        :param searchterm: the collection term to be searched
+        
+        """
         
         cmd_command = f'cd {os.getcwd()}/NFTs && curl "https://api.opensea.io/api/v1/assets?collection={collection_name}&format=json&include_orders=false&limit=20&order_direction=desc" -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:103.0) Gecko/20100101 Firefox/103.0" -o {collection_name}.json'
 
@@ -50,10 +75,11 @@ class NFT_Retriever:
     
     def getNFT(self, filename, nft_amount=1):
 
+    
         with open(f'NFTs/{filename}.json') as i_json:
             
             self.nftjson = json.load(i_json)
-            i_json.close()
+            
 
         i = 0
         for i in range(nft_amount):

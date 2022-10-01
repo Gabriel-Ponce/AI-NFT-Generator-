@@ -1,3 +1,15 @@
+#import tensorflow_hub as hub
+import numpy as np
+import os
+import PIL
+from PIL import Image
+from random import randrange
+import tensorflow as tf
+import pathlib
+import glob
+from matplotlib import pyplot as plt
+
+
 import tensorflow_hub as hub
 import numpy as np
 import os
@@ -9,16 +21,29 @@ import pathlib
 import glob
 #import tensorflow_datasets as tfds
 
-dataset = list(glob.glob('NFT_IMAGES/1/*.png'))
-print(len(dataset))
-IS = (512, 512)
-image = PIL.Image.open(dataset[randrange(410)]).resize(IS)
-image.show()
+class NFT_Generator:
 
-module = hub.load('https://tfhub.dev/deepmind/biggan-deep-512/1')
+    def __init__(self):
+        self.batch_size = 32
+        self.img_h = 512
+        self.img_w = 512
 
-a = module(image)
+    def prepareDataset(self): 
+        traindata = tf.keras.utils.image_dataset_from_directory(
+            'NFT_IMAGES',
+            validation_split=0.2,
+            subset="training",
+            seed=123,
+            image_size=(self.img_h, self.img_w),
+            batch_size= self.batch_size
+            )
+        print(traindata)
+        class_names = traindata.class_names
+        print(class_names)
+        
+        normalization_layer = tf.keras.layers.Rescaling(1./255)
+        #traindata = traindata.map()
 
-print(a)
 
-
+nftgenerator = NFT_Generator()
+nftgenerator.prepareDataset()        
