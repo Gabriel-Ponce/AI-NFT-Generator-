@@ -11,9 +11,9 @@ from PIL import Image
 import sys
 
 class NFT_Retriever:
-"""
-This class Retrieves NFT's using curl to access the OpenSea API without having an API KEY
-"""
+    """
+    This class Retrieves NFT's using curl to access the OpenSea API without having an API KEY
+    """
     
     def __init__(self, qual_cat = 1):
         self.category = pd.read_csv(f'{str(qual_cat)}.csv')
@@ -43,8 +43,8 @@ This class Retrieves NFT's using curl to access the OpenSea API without having a
             link = res['items'][0]['link']
             return link[30:]
 
-        except Exception as e:
-            print(e)
+        except Exception as error:
+            print(error)
             print(res)
 
     def getCollection(self, collection_index=0):
@@ -74,7 +74,13 @@ This class Retrieves NFT's using curl to access the OpenSea API without having a
         
     
     def getNFT(self, filename, nft_amount=1):
-
+        """
+        Open the json file that the method getAssets saved and save the .png file
+        
+        :param filename: The filename of the colection json e.g. "cryptopunks.json"
+        
+        :param nft_amount: The number of images that are going to be aved
+        """
     
         with open(f'NFTs/{filename}.json') as i_json:
             
@@ -105,7 +111,9 @@ This class Retrieves NFT's using curl to access the OpenSea API without having a
                 i+=1
 
     def getRankingNFTS(self): 
-        
+        """
+        Get 15 nfts of every collection in a ranking csv
+        """
         for j in range(46):
             j+=1
             try:

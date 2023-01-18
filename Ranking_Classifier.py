@@ -3,7 +3,9 @@ import pandas as pd
 
 
 class RankingClassifier: 
-
+"""
+Class made to Classify the nfts ranking into 5 rankings sorting them by the amount of money they've made 
+"""
     def __init__(self):
         self.nftcsv = pd.read_csv('NFT_Top_Collections.csv')
         
@@ -19,8 +21,14 @@ class RankingClassifier:
          
         #print(self.nftcsv)
     
-    def generateCSVs(self):
-        self.partitions = 5
+    def generateCSVs(self, parts):
+         """
+        Generate the csv with a certain number of partitions
+        
+        :args parts: Number of Partitions
+        """
+        
+        self.partitions = parts
         self.nftcsvs = np.array_split(self.nftcsv, self.partitions)
         print(self.nftcsvs)
 
@@ -31,7 +39,7 @@ class RankingClassifier:
 
 
 rankingclassifier = RankingClassifier()
-rankingclassifier.generateCSVs()
+rankingclassifier.generateCSVs(5)
 
 
 
